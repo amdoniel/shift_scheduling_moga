@@ -2,6 +2,19 @@ import pandas as pd
 from collections import defaultdict
 
 def load_dataset(filepath):
+
+       """
+    Parses a .dat file formatted according to the personnel task scheduling problem
+    and returns structured DataFrames for jobs and worker qualifications.
+
+    Parameters:
+        filepath (str): Path to the .dat file
+
+    Returns:
+        jobs_df (DataFrame): Start and end times of jobs
+        worker_df (DataFrame): Worker qualifications
+        metadata (dict): Parsed meta-info such as number of jobs, workers, etc.
+    """
  
     with open(filepath, 'r') as file:
         lines = file.readlines()

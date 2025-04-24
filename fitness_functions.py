@@ -1,3 +1,9 @@
+# Defining the multi-objective fitness evaluation for the MOGA.
+# these includes
+#   Objective 1 to Minimize number of active shifts (unique workers used)
+#   Objective 2 to Minimize workload imbalance (std dev of task counts)
+#   Penalty for constraint violations (unqualified assignments)
+
 import numpy as np
 
 def evaluate_chromosome(chromosome, worker_df, num_jobs):

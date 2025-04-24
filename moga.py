@@ -1,3 +1,5 @@
+# NSGA-II optimizer with tunable mutation rate and penalty weight.
+
 import random
 import numpy as np
 from representation import generate_initial_population
