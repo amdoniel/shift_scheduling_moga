@@ -1,4 +1,6 @@
-# NSGA-II optimizer with tunable mutation rate and penalty weight.
+# NSGA-II-based Multi-Objective Genetic Algorithm for
+# shift scheduling. This module manages selection, crossover, mutation,
+# and non-dominated sorting with an archive for Pareto-optimal solutions.
 
 import random
 import numpy as np
@@ -70,5 +72,3 @@ def nsga2_fixed(worker_df, num_jobs, pop_size=100, generations=50, penalty_weigh
                 archive.append((ind, fit))
 
     return population, fitnesses, archive
-
-

@@ -1,9 +1,9 @@
-# Defining the multi-objective fitness evaluation for the MOGA.
-# these includes
-#   Objective 1 to Minimize number of active shifts (unique workers used)
-#   Objective 2 to Minimize workload imbalance (std dev of task counts)
-#   Penalty for constraint violations (unqualified assignments)
-
+#Defineing the multi-objective fitness evaluation for the MOGA.
+# Includes:
+#   Objective 1: Minimize number of active shifts (unique workers used)
+#   Objective 2: Minimize workload imbalance (std dev of task counts)
+#   Constraint penalty
+#   Idle time minimization and tracking
 
 import numpy as np
 

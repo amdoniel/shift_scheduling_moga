@@ -16,7 +16,7 @@ from visualize import (
 )
 import matplotlib.pyplot as plt
 
-# Parameters Configuration
+# Configurable parameters
 DATA_FOLDER = "data"
 OUTPUT_FOLDER = "results"
 POPULATION_SIZE = 100
@@ -25,7 +25,7 @@ PENALTY_WEIGHT = 200
 MUTATION_RATE = 0.1
 IDLE_TIME_WEIGHT = 0.1
 
-# check if results folder exists
+# Ensure results folder exists
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 def dominates(f1, f2):
@@ -73,7 +73,7 @@ def main():
         results.to_csv(results_file, index=False)
         print(f"Saved results to: {results_file}")
 
-        #Save archive solutions
+        # save archive solutions
         archive_population = [ind for ind, fit in archive]
         archive_fitnesses = [fit for ind, fit in archive]
 
@@ -83,7 +83,7 @@ def main():
         archive_df.to_csv(archive_file, index=False)
         print(f"Saved archive results to: {archive_file}")
 
-        #Plot archive Pareto front
+        #plot archive Pareto front
         plt.figure(figsize=(8, 6))
         plt.scatter(archive_df["ShiftsUsed"], archive_df["Fairness"], c=archive_df["IdleTime"], cmap='viridis')
         plt.colorbar(label="Idle Time")

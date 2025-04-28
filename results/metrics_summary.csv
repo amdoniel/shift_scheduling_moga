@@ -1,0 +1,4 @@
+Dataset,Feasible (%),Pareto Front Size,Fairness Spread,Avg Idle Time
+data_33_76_240_66.dat,100.0,64,1.192,1618.25
+data_10_51_111_66.dat,100.0,82,1.624,522.73
+data_56_163_500_66.dat,100.0,65,1.445,855.17

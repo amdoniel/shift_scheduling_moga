@@ -1,9 +1,11 @@
+# This script handles parsing and structuring of the dataset file (.dat)
+# for the Shift Minimization Personnel Task Scheduling Problem.
+
 import pandas as pd
 from collections import defaultdict
 
 def load_dataset(filepath):
-
-       """
+    """
     Parses a .dat file formatted according to the personnel task scheduling problem
     and returns structured DataFrames for jobs and worker qualifications.
 
@@ -15,7 +17,6 @@ def load_dataset(filepath):
         worker_df (DataFrame): Worker qualifications
         metadata (dict): Parsed meta-info such as number of jobs, workers, etc.
     """
- 
     with open(filepath, 'r') as file:
         lines = file.readlines()
 

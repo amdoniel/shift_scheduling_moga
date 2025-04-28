@@ -1,5 +1,5 @@
 # Contains functions to plot the results of the MOGA optimization.
-# Includes Pareto front, archive, fairness analysis, and dataset interpretation visuals.
+# Includes Pareto front, fairness analysis, and dataset interpretation visuals.
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -221,3 +221,4 @@ def plot_worker_time_balance(chromosome, jobs_df, save_path=None):
         plt.close()
     else:
         plt.show()
+
