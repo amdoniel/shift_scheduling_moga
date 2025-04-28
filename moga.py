@@ -31,6 +31,8 @@ def nsga2_fixed(worker_df, num_jobs, pop_size=100, generations=50, penalty_weigh
         f1, f2, idle = penalized_fitness(ind, worker_df, num_jobs, penalty_weight, jobs_df, idle_time_weight)
         fitnesses.append((f1, f2, idle))
 
+    archive = []
+
     for _ in range(generations):
         offspring = []
         while len(offspring) < pop_size:
@@ -62,4 +64,11 @@ def nsga2_fixed(worker_df, num_jobs, pop_size=100, generations=50, penalty_weigh
         population = [combined[i] for i in selected_indices]
         fitnesses = [combined_fitnesses[i] for i in selected_indices]
 
-    return population, fitnesses
+        for ind, fit in zip(population, fitnesses):
+            if not any(dominates(a_fit[:2], fit[:2]) for _, a_fit in archive):
+                archive = [(a_ind, a_fit) for (a_ind, a_fit) in archive if not dominates(fit[:2], a_fit[:2])]
+                archive.append((ind, fit))
+
+    return population, fitnesses, archive
+
+

@@ -1,10 +1,11 @@
 # Contains functions to plot the results of the MOGA optimization.
-# Includes Pareto front, fairness analysis, and dataset interpretation visuals.
+# Includes Pareto front, archive, fairness analysis, and dataset interpretation visuals.
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from collections import defaultdict
 
 def plot_pareto_front(results_df, save_path=None):
     if results_df.empty or 'ShiftsUsed' not in results_df or 'Fairness' not in results_df:
@@ -141,6 +142,78 @@ def plot_worker_schedule(chromosome, jobs_df, worker_id, save_path=None):
     ax.set_xlabel("Time")
     ax.set_yticks([])
     ax.set_xlim(left=0)
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path)
+        plt.close()
+    else:
+        plt.show()
+
+def plot_all_worker_schedules(chromosome, jobs_df, save_path=None):
+    assignments = {}
+    for job_id, worker_id in enumerate(chromosome):
+        if worker_id not in assignments:
+            assignments[worker_id] = []
+        assignments[worker_id].append((job_id, jobs_df.loc[job_id, "Start"], jobs_df.loc[job_id, "End"]))
+
+    fig, ax = plt.subplots(figsize=(12, 8))
+    yticks, ylabels = [], []
+
+    for idx, (worker_id, jobs) in enumerate(sorted(assignments.items())):
+        for job_id, start, end in sorted(jobs, key=lambda x: x[1]):
+            ax.plot([start, end], [idx, idx], linewidth=4, label=f"Job {job_id}")
+            ax.text((start + end) / 2, idx + 0.1, str(job_id), ha='center', va='bottom', fontsize=7)
+        yticks.append(idx)
+        ylabels.append(str(worker_id))
+
+    ax.set_title("Schedules for All Workers")
+    ax.set_xlabel("Time")
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(ylabels)
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path)
+        plt.close()
+    else:
+        plt.show()
+
+def plot_worker_time_balance(chromosome, jobs_df, save_path=None):
+    worker_durations = defaultdict(int)
+    worker_gaps = defaultdict(int)
+    worker_jobs = defaultdict(list)
+
+    for job_id, worker_id in enumerate(chromosome):
+        start = jobs_df.loc[job_id, "Start"]
+        end = jobs_df.loc[job_id, "End"]
+        worker_durations[worker_id] += (end - start)
+        worker_jobs[worker_id].append((start, end))
+
+    for worker_id, jobs in worker_jobs.items():
+        jobs.sort()
+        for i in range(1, len(jobs)):
+            worker_gaps[worker_id] += max(0, jobs[i][0] - jobs[i - 1][1])
+
+    activity_df = pd.DataFrame({
+        "Worker": list(worker_durations.keys()),
+        "Active Time": list(worker_durations.values()),
+        "Idle Time": [worker_gaps.get(w, 0) for w in worker_durations.keys()]
+    })
+
+    x = np.arange(len(activity_df))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(14, 6))
+    ax.bar(x - width/2, activity_df["Active Time"], width, label="Active Time")
+    ax.bar(x + width/2, activity_df["Idle Time"], width, label="Idle Time")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(activity_df["Worker"], rotation=45)
+    ax.set_xlabel("Worker ID")
+    ax.set_ylabel("Time")
+    ax.set_title("Worker Active vs Idle Time")
+    ax.legend()
     plt.tight_layout()
 
     if save_path:
